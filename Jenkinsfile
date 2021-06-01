@@ -1,15 +1,14 @@
 pipeline{
   agent any
+  tools{
+        maven 'maven3'
+    }
 
   stages{
     stage('Maven Build'){
       steps{
         echo "${getLatestCommitId()}"
-        steps{
-          def mvnHome = tool name: 'maven3', type: 'maven'
-          def mvnCMD = "${mvnHome}/bin/mvn"
-          sh "${mvnCMD} clean package"
-        }
+        sh "mvn clean package"
       }
     }
 
