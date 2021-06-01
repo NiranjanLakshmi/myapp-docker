@@ -14,7 +14,7 @@ pipeline{
 
     stage('Docker Build Image'){
       steps{
-        sh "docker build -t lakshmi131/my-app:1.0.0 ."
+        sh "docker build -t lakshmi131/my-app:${getLatestCommitId()} ."
       }
     }
     
@@ -22,7 +22,7 @@ pipeline{
       steps{
         withCredentials([string(credentialsId: 'docker-hub', variable: 'dockerPwd')]) {
           sh "docker login -u lakshmi131 -p ${dockerPwd}"
-          sh "docker push lakshmi131/myapp:${getLatestCommitId()}"
+          sh "docker push lakshmi131/my-app:${getLatestCommitId()}"
         }
         
       }
@@ -32,7 +32,7 @@ pipeline{
       steps{
         sshagent(['docker-dev']) {
             sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.40.194 docker rm -f myweb"
-            sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.40.194 docker run -d -p 8080:8080 --name myweb lakshmi131/myapp:${getLatestCommitId()}"
+            sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.40.194 docker run -d -p 8080:8080 --name myweb lakshmi131/my-app:${getLatestCommitId()}"
         }
       }
     }
