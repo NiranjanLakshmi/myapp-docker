@@ -32,7 +32,7 @@ pipeline{
       steps{
         sshagent(['docker-master']) {
             sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.40.194 docker rm -f myweb"
-            sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.40.194 docker run -d -p 8080:8080 --name myweb lakshmi131/my-app:${getLatestCommitId()}"
+            sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.40.194 docker run -d -p 8090:8080 --name myweb lakshmi131/my-app:${getLatestCommitId()}"
         }
       }
     }
